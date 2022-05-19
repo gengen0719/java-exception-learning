@@ -11,9 +11,9 @@ public class MurderPlayLogDao {
 	
 	
 	public List<MurderPlayLog> load(String userName) {
-		
 		List<MurderPlayLog> murderPlayLogList = new ArrayList<>();
 		try {
+			// 例外処理の演習のため、ここではあえて古典的な書き方にしています
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/testdb","root", "root");
 			
@@ -32,7 +32,7 @@ public class MurderPlayLogDao {
 			}
 			
 		} catch (Exception e) {
-
+			
 		} 
 		return murderPlayLogList;
 	}
