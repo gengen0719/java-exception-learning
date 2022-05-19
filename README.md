@@ -9,10 +9,42 @@ Javaの例外処理の学習のためのプロジェクトです
 今回はそんな例外処理のJavaでの基本的な実装方法と重要性について学習していただけるようなコンテンツを用意してみました。  
 ぜひ実際の運用を想像しながらやってみてください。  
 
+# サンプルアプリケーションの構成
+WebPageにアクセスすると
+データベースの `MURDER_PLAY_LOG` テーブルのデータに応じてカードを表示する  
+アプリケーションと呼ぶには少し簡単すぎるテストプログラムです。  
+![image](https://user-images.githubusercontent.com/74813858/169373559-3594a89d-20ce-48ca-8cc3-e9ce56be1693.png)
+SpringBootとDockerのMYSQLサーバーで動作しています。  
+（図を入れる）
+
 # 準備
+## Dockerの準備
+mysqlのdocker imageのpull
+```
+docker pull mysql
+```
+docker imageの起動
+```
+docker run --name testdb -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=testdb -P --expose=3306 -p 3306:3306 -d mysql:latest
+```
+テーブルの作成
+```
+CREATE TABLE MURDER_PLAY_LOG(
+ USER_NAME VARCHAR(255),
+ GAME_ID VARCHAR(255),
+ GAME_NAME VARCHAR(255),
+ PLAYED INT,
+ PLAY_DATE DATE
+)
+```
+データの投入
+```
+INSERT INTO MURDER_PLAY_LOG VALUES ("太郎","blue-moon","何度だって青い月に火を灯した",1,"2022-05-04");
+INSERT INTO MURDER_PLAY_LOG VALUES ("太郎","mad-mountain","狂気山脈 陰謀の分水嶺",0,null);
+INSERT INTO MURDER_PLAY_LOG VALUES ("太郎","kikoku-kan","鬼哭館の殺人事件",0,null);
+```
 
-
-
+## アプリケーションサーバーの準備
 PCの適当な場所にこのリポジトリをcloneします
 ```
 git clone https://github.com/gengen0719/java-exception-learning.git
