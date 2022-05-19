@@ -6,11 +6,13 @@ import org.springframework.ui.Model;
 
 public class MurderPlayLogLoader {
 
-	public void load(Model model){
+	public void load(Model model) {
 		String userName = "太郎"; //TODO User認証
+		
 		MurderPlayLogDao dao = new MurderPlayLogDao();
 		List<MurderPlayLog> murderPlayLogList= dao.load(userName);
 		model.addAttribute("playLogList", murderPlayLogList);
+		model.addAttribute("userName",userName);
 	}
 	
 }

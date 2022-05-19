@@ -24,6 +24,7 @@ public class WebPageController {
     public String commonExceptionHandler(Exception e, Model model) {
     	model.addAttribute("error", e.getClass().getName());
     	model.addAttribute("message", e.getMessage());
+    	e.printStackTrace();
         return "error";
     }
 	

@@ -10,7 +10,7 @@
 </head>
 <body>
 <main>
-<h1>マーダーミステリープレイ記録</h1>
+<h2 th:text="${userName} + 'さんのマーダーミステリープレイ記録'" ></h2>
 
 <div class="card_container">
 	<div class="card" style="width:300px;" th:each="playLog : ${playLogList}" >

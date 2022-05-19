@@ -10,7 +10,7 @@ import java.util.List;
 public class MurderPlayLogDao {
 	
 	
-	public List<MurderPlayLog> load(String userName) {
+	public List<MurderPlayLog> load(String userName)  {
 		List<MurderPlayLog> murderPlayLogList = new ArrayList<>();
 		try {
 			// 例外処理の演習のため、ここではあえて古典的な書き方にしています
@@ -33,7 +33,7 @@ public class MurderPlayLogDao {
 			
 		} catch (Exception e) {
 			
-		} 
+		}
 		return murderPlayLogList;
 	}
 	
