@@ -10,10 +10,9 @@ Javaの例外処理の学習のためのプロジェクトです
 ぜひ実際の運用を想像しながらやってみてください。  
 
 # サンプルアプリケーションの構成
-WebPageにアクセスすると
-データベースの `MURDER_PLAY_LOG` テーブルのデータに応じてカードを表示する  
+ウェブページにアクセスするとデータベースの `MURDER_PLAY_LOG` テーブルのデータに応じてカードを表示する  
 アプリケーションと呼ぶには少し簡単すぎるテストプログラムです。  
-![image](https://user-images.githubusercontent.com/74813858/169373559-3594a89d-20ce-48ca-8cc3-e9ce56be1693.png)
+  
 SpringBootとDockerのMYSQLサーバーで動作しています。  
 （図を入れる）
 
@@ -61,3 +60,6 @@ Run As > Java Application
 ```
 http://localhost:8080/exception-learning
 ```
+  
+   
+![image](https://user-images.githubusercontent.com/74813858/169373559-3594a89d-20ce-48ca-8cc3-e9ce56be1693.png)
