@@ -95,34 +95,8 @@ http://localhost:8080/exception-learning
 今回のアプリケーションはとても簡単なものなので問題の箇所はすぐに見つかりますが、  
 実際に運用されるアプリケーションは数十万行、数百万行というようなコードの中から問題の箇所を探さないといけないかもしれないです。  
   
-## 例外の握り潰し
+## 実装の問題点
 実際に問題の箇所を探してみましょう。  
 どこが問題でしょうか？  
-  
-```
-		try {
-			// 例外処理の演習のため、ここではあえて古典的な書き方にしています
-			Class.forName("com.mysql.cj.jdbc.Driver");
-			Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/testdb","root", "root");
-			
-			PreparedStatement ps;
-				ps = con.prepareStatement("SELECT * FROM MURDER_PLAY_LOG WHERE USER_NAME = ?");
-			ps.setString(1, userName);
-			ResultSet rs = ps.executeQuery();
-			while(rs.next()) {
-				MurderPlayLog murderPlayLog = new MurderPlayLog();
-				murderPlayLog.setUserName(userName);
-				murderPlayLog.setGameId(rs.getString("GAME_ID"));
-				murderPlayLog.setGameName(rs.getString("GAME_NAME"));
-				murderPlayLog.setPlayed(rs.getInt("PLAYED"));
-				murderPlayLog.setPlayDate(rs.getDate("PLAY_DATE"));
-				murderPlayLogList.add(murderPlayLog);
-			}
-			
-		} catch (Exception e) {
-			
-		} 
-```
-  
-このコードの問題点をできるだけたくさん挙げてみてください。  
+またこのアプリケーションの例外処理に関する実装の問題点をできるだけ多く挙げてみてください。  
   
