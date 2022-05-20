@@ -42,8 +42,8 @@ CREATE TABLE MURDER_PLAY_LOG(
 データの投入
 ```
 INSERT INTO MURDER_PLAY_LOG VALUES ("太郎","blue-moon","何度だって青い月に火を灯した",1,"2022-05-04");
-INSERT INTO MURDER_PLAY_LOG VALUES ("太郎","mad-mountain","狂気山脈 陰謀の分水嶺",0,null);
-INSERT INTO MURDER_PLAY_LOG VALUES ("太郎","kikoku-kan","鬼哭館の殺人事件",0,null);
+INSERT INTO MURDER_PLAY_LOG VALUES ("太郎","mad-mountain","狂気山脈 陰謀の分水嶺",1,"2021-10-25");
+INSERT INTO MURDER_PLAY_LOG VALUES ("太郎","kikoku-kan","鬼哭館の殺人事件",1,"2022-01-09");
 ```
 
 ## アプリケーションサーバーの準備
@@ -111,11 +111,11 @@ http://localhost:8080/exception-learning
 Controllerにヒントがあります  
 
 ## プレイ記録がないユーザーが画面を開いた時は例外か？
-`MurderPlayLogLoader` の `userName` を別の名前に変更します。  
+`WebPageController` の `userName` を別の名前に変更します。  
 ```
 String userName = "次郎"; //本来はユーザー認証によってuserNameが渡ってくる
 ```
 データベースには次郎さんのプレイ記録がないため、カードが表示されなくなります。  
 このままの実装で良いでしょうか？  
 良くない場合、どのように実装すれば良いでしょうか？  
-メソッドの役割と返り値の定義、HTTPレスポンスコードの扱いを踏まえて実装してみてください。
+メソッドの役割と返り値の定義、HTTPレスポンスコードの扱いを踏まえて実装してみてください。  
