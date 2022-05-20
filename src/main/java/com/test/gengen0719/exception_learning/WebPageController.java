@@ -25,7 +25,6 @@ public class WebPageController {
 	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(Exception.class)
     public String commonExceptionHandler(Exception e, Model model) {
-    	model.addAttribute("error", e.getClass().getName());
     	model.addAttribute("message", e.getMessage());
     	e.printStackTrace();
         return "error";
