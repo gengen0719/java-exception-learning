@@ -9,13 +9,19 @@ import java.util.List;
 
 public class MurderPlayLogDao {
 	
-	
+	/**
+	 * ユーザーのプレイ記録をデータベースから読み込み
+	 * {@link MurderPlayLog} のListにして返します。
+	 *  
+	 * @param userName
+	 * @return
+	 */
 	public List<MurderPlayLog> load(String userName)  {
 		List<MurderPlayLog> murderPlayLogList = new ArrayList<>();
 		try {
 			// 例外処理の演習のため、ここではあえて古典的な書き方にしています
 			Class.forName("com.mysql.cj.jdbc.Driver");
-			Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/testdb","root", "root");
+			Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/testdb","root", "root");// 本来はリソースファイルに記載される
 			
 			PreparedStatement ps;
 				ps = con.prepareStatement("SELECT * FROM MURDER_PLAY_LOG WHERE USER_NAME = ?");
