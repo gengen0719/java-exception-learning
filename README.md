@@ -217,7 +217,46 @@ catchしたExceptionの内容をどこにも残さず握りつぶしているの
 		model.addAttribute("playLogList", murderPlayLogList);
 		model.addAttribute("userName",userName);
 ```
+エラーが発生したことをユーザーに知らせる方法は色々なものがありますが、今回はエラーページを表示してみましょう。  
+実はすでにControllerにエラーページを表示する仕組みを用意しています。  
+```
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ExceptionHandler(Exception.class)
+    public String commonExceptionHandler(Exception e, Model model) {
+		ErrorPageLoader errorPageLoader = new ErrorPageLoader();
+		return errorPageLoader.load(e, model);
+    }
+```
+Controllerの中でException(例外)が発生すると `@ExceptionHandler(Exception.class)` というアノテーションがついたメソッドが呼び出されます。  
+`ErrorPageLoader` ではエラー情報を出力し `error.html` を表示しています。
+```
+	public String load(Exception e,Model model) {
+    	model.addAttribute("message", e.getMessage());
+    	e.printStackTrace();
+        return "error";
+	}
+```
+`error.html`  
+```
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Test Application ExceptionLearning</title>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+ integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+<link rel="stylesheet" href="/css/index.css">
 
+</head>
+<body>
+	<main>
+		<h1 class="text-danger">予期せぬエラーが発生しました。復旧までしばらくお待ちください。</h1>
+		<p th:text="${message}" />
+	</main>
+
+</body>
+</html>
+```
 
 ## プレイ記録がないユーザーが画面を開いた時は例外か？
 `WebPageController` の `userName` を別の名前に変更します。  
