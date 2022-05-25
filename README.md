@@ -295,7 +295,7 @@ public List<MurderPlayLog> load(String userName) throws ClassNotFoundException, 
   
 例外も返り値の一つとして厳密に定義することが大事です。  
 
-## プレイ記録がないユーザーが画面を開いた時は例外か？
+## （余力があったら）プレイ記録がないユーザーが画面を開いた時は例外か？
 `MainPageController` の `userName` を別の名前に変更します。  
 ```
 String userName = "次郎"; //本来はユーザー認証によってuserNameが渡ってくる
