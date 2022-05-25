@@ -7,6 +7,8 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.dbutils.DbUtils;
+
 public class MurderPlayLogDao {
 	
 	/**
@@ -23,8 +25,7 @@ public class MurderPlayLogDao {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/testdb","root", "root");// 本来はリソースファイルに記載される
 			
-			PreparedStatement ps;
-				ps = con.prepareStatement("SELECT * FROM MURDER_PLAY_LOG WHERE USER_NAME = ?");
+			PreparedStatement ps = con.prepareStatement("SELECT * FROM MURDER_PLAY_LOG WHERE USER_NAME = ?");
 			ps.setString(1, userName);
 			ResultSet rs = ps.executeQuery();
 			while(rs.next()) {
@@ -36,10 +37,10 @@ public class MurderPlayLogDao {
 				murderPlayLog.setPlayDate(rs.getDate("PLAY_DATE"));
 				murderPlayLogList.add(murderPlayLog);
 			}
-			
+			DbUtils.closeQuietly(con, ps, rs);
 		} catch (Exception e) {
 			
-		}
+		} 
 		return murderPlayLogList;
 	}
 	
