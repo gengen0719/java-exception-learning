@@ -236,7 +236,9 @@ Controllerの中でException(例外)が発生すると `@ExceptionHandler(Except
         return "error";
 	}
 ```
-`error.html`  
+
+**error.html**  
+
 ```
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
@@ -257,6 +259,40 @@ Controllerの中でException(例外)が発生すると `@ExceptionHandler(Except
 </body>
 </html>
 ```
+`MurderPlayLogDao` で発生した例外をControllerまで伝搬させてこの仕組みを使いましょう。  
+
+### 後片付けをする
+`MurderPlayLogDao` はデータベースにアクセスするクラスのため、データベースリソースを使用します。  
+```
+Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/testdb","root", "root");// 本来はリソースファイルに記載される
+		
+PreparedStatement ps = con.prepareStatement("SELECT * FROM MURDER_PLAY_LOG WHERE USER_NAME = ?");
+ps.setString(1, userName);
+ResultSet rs = ps.executeQuery();
+```
+これらは使用した後には必ずcloseしてあげる必要があります。
+```
+DbUtils.closeQuietly(con, ps, rs);
+```
+しかし、例外は発生するとメソッド内の処理を中断するため、closeが実行されない可能性があります。  
+途中で処理が中断されてもclose処理が行われるようにfinally節にclose処理を記載しましょう。  
+
+### メソッドの役割と返り値を厳密に定義して実装する
+`MurderPlayLogDao` のインターフェースについて考えてみましょう
+もともとは
+```
+public List<MurderPlayLog> load(String userName)
+```
+となっていました。  
+これは `userName` という文字列を受け取って `MurderPlayLog` という構造体のListを返すというインターフェースです。  
+それが先ほどの修正で  
+```
+public List<MurderPlayLog> load(String userName) throws ClassNotFoundException, SQLException 
+```
+ `userName` という文字列を受け取って `MurderPlayLog` という構造体のListを返す  
+ **ただしClassNotFoundExceptionとSQLExceptionという例外を返す可能性がある** というインターフェースに変わりました。  
+この **例外を返す可能性がある** とすることで呼び出し元のメソッドは例外処理を行うことができます。  
+例外も返り値の一つとして厳密に定義することが大事です。  
 
 ## プレイ記録がないユーザーが画面を開いた時は例外か？
 `WebPageController` の `userName` を別の名前に変更します。  
