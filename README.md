@@ -80,8 +80,8 @@ http://localhost:8080/exception-learning
 それについて考えることからスタートしてみましょう。  
   
 **悪戯をされた後の画面**
-画面を張る  
-  
+![image](https://user-images.githubusercontent.com/74813858/170371196-e4929bdf-c7ed-46a2-bbd0-68a53438f19c.png)
+    
 画面自体は表示されるが、今まで表示されていたゲームのカードが表示されなくなってしまいました。  
   
 ### ユーザーとしてアプリケーションを利用する時
