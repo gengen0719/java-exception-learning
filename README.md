@@ -259,7 +259,7 @@ Controllerの中でException(例外)が発生すると `@ExceptionHandler(Except
 </body>
 </html>
 ```
-`MurderPlayLogDao` で発生した例外をControllerまで伝搬させてこの仕組みを使いましょう。  
+catch節を削除し `MurderPlayLogDao` で発生した例外をControllerまで伝搬させてこの仕組みを使いましょう。  
 
 ### 後片付けをする
 `MurderPlayLogDao` はデータベースにアクセスするクラスのため、データベースリソースを使用します。  
@@ -291,11 +291,12 @@ public List<MurderPlayLog> load(String userName) throws ClassNotFoundException, 
 ```
  `userName` という文字列を受け取って `MurderPlayLog` という構造体のListを返す  
  **ただしClassNotFoundExceptionとSQLExceptionという例外を返す可能性がある** というインターフェースに変わりました。  
-この **例外を返す可能性がある** とすることで呼び出し元のメソッドは例外処理を行うことができます。  
+この **例外を返す可能性がある** とすることで呼び出し元のメソッドは例外処理を含めた処理を正しく行うことができるようになります。  
+  
 例外も返り値の一つとして厳密に定義することが大事です。  
 
 ## プレイ記録がないユーザーが画面を開いた時は例外か？
-`WebPageController` の `userName` を別の名前に変更します。  
+`MainPageController` の `userName` を別の名前に変更します。  
 ```
 String userName = "次郎"; //本来はユーザー認証によってuserNameが渡ってくる
 ```
@@ -303,3 +304,4 @@ String userName = "次郎"; //本来はユーザー認証によってuserNameが
 このままの実装で良いでしょうか？  
 良くない場合、どのように実装すれば良いでしょうか？  
 メソッドの役割と返り値の定義、HTTPレスポンスコードの扱いを踏まえて実装してみてください。  
+このアプリケーションの仕様として初めてログインしたユーザーはプレイ記録がない前提とします。
