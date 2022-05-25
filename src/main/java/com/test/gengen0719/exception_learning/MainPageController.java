@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @Controller
-public class WebPageController {
+public class MainPageController {
 	
     @Autowired
     JdbcTemplate jdbc;
@@ -25,9 +25,8 @@ public class WebPageController {
 	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(Exception.class)
     public String commonExceptionHandler(Exception e, Model model) {
-    	model.addAttribute("message", e.getMessage());
-    	e.printStackTrace();
-        return "error";
+		ErrorPageLoader errorPageLoader = new ErrorPageLoader();
+		return errorPageLoader.load(null, model);
     }
 	
 }
