@@ -105,7 +105,17 @@ http://localhost:8080/exception-learning
 ## 実装の問題点
 実際に実装のどこが問題なのかを探してみましょう。  
 今回は幸いにもeclipseで動かしているのでデバッグをすることができます。  
-Controllerのエンドポイントから順番に処理を見ていきましょう。  
+`http://localhost:8080/exception-learning` にアクセスすると  
+`@GetMapping("/exception-learning")` というアノテーションがついたメソッドが呼び出されます。  
+そこにBreakPointを置いてデバッグしていきましょう。  
+```
+	@GetMapping("/exception-learning")
+	public String index(Model model) {
+		String userName = "太郎"; //本来はユーザー認証によってuser情報が渡ってくる
+		MurderPlayLogLoader loader = new MurderPlayLogLoader();
+		return loader.load(userName,model);
+	}
+```
 Daoの中に何やら怪しいコードが見つかりました。  
 ```
 } catch (Exception e) {
@@ -136,6 +146,78 @@ catchしたExceptionの内容をどこにも残さず握りつぶしているの
 エラーの内容からデータベースとの通信がうまくいっていないようなので、データベースの状態を確認してみましょう。  
 
 ### ユーザーに問題を知らせる
+ユーザーに問題を知らせるためには画面に情報を表示する必要があります。  
+今回のサンプルアプリケーションの画面表示の仕組みを見てみましょう。  
+もう一度 `@GetMapping("/exception-learning")` というアノテーションがついたメソッドから見ていきます。  
+```
+	@GetMapping("/exception-learning")
+	public String index(Model model) {
+		String userName = "太郎"; //本来はユーザー認証によってuser情報が渡ってくる
+		MurderPlayLogLoader loader = new MurderPlayLogLoader();
+		return loader.load(userName,model);
+	}
+```
+実際に処理を行っているのは `MurderPlayLogLoader` というクラスです。
+```
+	/**
+	 * ユーザーのマーダーミステリーのプレイ記録を読み込んでパラメーターの {@link Model}に詰めます。
+	 * @param userName
+	 * @param model
+	 * @return modelに対応するtemplateを返します
+	 */
+	public String load(String userName,Model model) {
+		MurderPlayLogDao dao = new MurderPlayLogDao();
+		List<MurderPlayLog> murderPlayLogList= dao.load(userName);
+		model.addAttribute("playLogList", murderPlayLogList);
+		model.addAttribute("userName",userName);
+		return "playlog";
+	}
+```
+ここで返り値として返している文字列がテンプレートとして利用するhtmlファイルの名前になります。  
+`playlog.html` を見てみましょう。  
+```
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Test Application ExceptionLearning</title>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+ integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+<link rel="stylesheet" href="/css/index.css">
+
+</head>
+<body>
+<main>
+<h2 th:text="${userName} + 'さんのマーダーミステリープレイ記録'" ></h2>
+
+<div class="card_container">
+	<div class="card" style="width:300px;" th:each="playLog : ${playLogList}" >
+		<img class="card-img-top" th:src="'/img/' + ${playLog.gameId} + '.jpg'" alt="Card image">
+		<div class="card-body">
+			<h4 class="card-title">
+				<span th:text=${playLog.gameName} />
+			</h4>
+			<p class="card-text">
+				<span>プレイした日:</span>
+          		<span th:text=${playLog.playDate} />
+			</p>
+        </div>
+      </div>
+</div>
+
+
+</main>
+
+</body>
+</html>
+```
+ここで `${playLogList}` のように記載されている部分が変数となり  
+`MurderPlayLogLoader` で `addAttribute` した値がはめ込まれて表示されます。
+```
+		model.addAttribute("playLogList", murderPlayLogList);
+		model.addAttribute("userName",userName);
+```
+
 
 ## プレイ記録がないユーザーが画面を開いた時は例外か？
 `WebPageController` の `userName` を別の名前に変更します。  
