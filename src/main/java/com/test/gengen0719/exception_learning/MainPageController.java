@@ -26,7 +26,7 @@ public class MainPageController {
     @ExceptionHandler(Exception.class)
     public String commonExceptionHandler(Exception e, Model model) {
 		ErrorPageLoader errorPageLoader = new ErrorPageLoader();
-		return errorPageLoader.load(null, model);
+		return errorPageLoader.load(e, model);
     }
 	
 }
